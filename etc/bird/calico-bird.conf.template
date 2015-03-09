@@ -40,7 +40,6 @@ filter export_bgp {
 
 if (@AS_NUMBER@,@ADVERT@) ~ bgp_community then 
    { 
-     bgp_community.empty;
      accept;
    } else {
       reject;

@@ -18,7 +18,6 @@ filter export_bgp {
 
 if (@AS_NUMBER@,@ADVERT@) ~ bgp_community then 
    { 
-     bgp_community.empty;
      accept;
    } else {
       reject;
@@ -26,9 +25,10 @@ if (@AS_NUMBER@,@ADVERT@) ~ bgp_community then
 }
 
 
+# Peer with my route reflector peers.  One per per
 # Peer with my route reflector peers, and other routers (like border router).  One per per
 
-protocol bgp N1 {
+protocol bgp RRPn {
   description "Connection to BGP peer";
   local as @AS_NUMBER@;
   neighbor @RR_IP_ADDRESS@ as @AS_NUMBER@;
@@ -37,9 +37,21 @@ protocol bgp N1 {
   source address @MY_IP_ADDRESS@;  # The local address we use for the TCP connection
 }
 
+# Peer with my  non-calico peers (strip my CS) such as other routers (like border router).  One per per
+
+protocol bgp FRn {
+  description "Connection to BGP peer";
+  local as @AS_NUMBER@;
+  neighbor @RR_IP_ADDRESS@ as @AS_NUMBER@;
+  import all;
+  bgp_community ~ empty;
+  export filter export_bgp;
+  source address @MY_IP_ADDRESS@;  # The local address we use for the TCP connection
+}
+
 # Peer with my route-reflector clients, one per client
 
-protocol bgp N1 {
+protocol bgp RRCn {
   description "Route Reflector client";
   local as @AS_NUMBER@;
   neighbor @RRC_IP_ADDRESS@ as @AS_NUMBER@;

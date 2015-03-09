@@ -29,6 +29,7 @@ if ( (ifname ~ "tap*") || (ifname ~ "veth*") || (ifname = "dummy1") ) then
    } else {
 	bgp_community.add ((@AS_NUMBER,@NO_ADVERT@));
 	accept;
+
    }
 filter export_bgp {
 # if a route is tagged with the export community string, then we will export it,
@@ -39,7 +40,6 @@ filter export_bgp {
 
 if (@AS_NUMBER@,@ADVERT@) ~ bgp_community then 
    { 
-     bgp_community.empty;
      accept;
    } else {
       reject;
@@ -64,6 +64,7 @@ protocol device {
 
 protocol direct {
    debug all;
+   import filter tag_direct;
    interface "-dummy0", "dummy1", "eth*", "em*";
 }
 
