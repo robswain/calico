@@ -59,8 +59,10 @@ echo "  copying config files..."
 
 if [ -f /etc/bird.conf ]; then
     cp /etc/bird.conf bird.conf
+    cp /etc/bird6.conf bird6.conf
 else
     cp /etc/bird/bird.conf bird.conf
+    cp /etc/bird/bird6.conf bird6.conf
 fi
 
 cp -a "$CALICO_CFG" etc_calico
@@ -81,6 +83,7 @@ cp -a "$NOVA_DIR" .
 mkdir logs
 cp /var/log/syslog* logs 2>&1 >/dev/null
 cp /var/log/messages* logs 2>&1 >/dev/null
+cp /var/log/bird* logs 2>&1 >/dev/null
 
 echo "  compressing..."
 cd ..
