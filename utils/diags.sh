@@ -83,7 +83,6 @@ cp -a "$NOVA_DIR" .
 mkdir logs
 cp /var/log/syslog* logs 2>&1 >/dev/null
 cp /var/log/messages* logs 2>&1 >/dev/null
-cp /var/log/bird* logs 2>&1 >/dev/null
 
 echo "  compressing..."
 cd ..
